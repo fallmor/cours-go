@@ -11,6 +11,11 @@ type person struct {
 }
 
 type SortByAge []person
+type SortByName []person
+
+func (a SortByName) Len() int           { return len(a) }
+func (a SortByName) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a SortByName) Less(i, j int) bool { return a[i].Name < a[j].Name }
 
 func (a SortByAge) Len() int {
 	return len(a)
@@ -38,5 +43,7 @@ func main() {
 	people := []person{p1, p2, p3}
 	fmt.Println(people)
 	sort.Sort(SortByAge(people))
+	fmt.Println(people)
+	sort.Sort(SortByName(people))
 	fmt.Println(people)
 }
