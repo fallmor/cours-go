@@ -10,7 +10,7 @@ func main() {
 	fmt.Println("Begin CPU", runtime.NumCPU())
 	fmt.Println("Begin Goroutines", runtime.NumGoroutine())
 	var wg sync.WaitGroup
-	wg.Add(1)
+	wg.Add(2)
 	go func() {
 		fmt.Println("I run first")
 		wg.Done()

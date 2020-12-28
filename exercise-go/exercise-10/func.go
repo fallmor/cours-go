@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func main() {
-	test(2, 4, 5, 7, 10, 15, 20, 33, 40)
+	test(2, 4, 5, 7, 10, 15, 20, 33,)
 }
 
 func test(x ...int) {
