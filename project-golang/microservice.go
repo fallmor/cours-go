@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/fallmor/cours-go/tree/main/project-golang/handlers"
+	"github.com/fallmor/cours-go/project-golang/handlers"
 )
 
 func main() {
