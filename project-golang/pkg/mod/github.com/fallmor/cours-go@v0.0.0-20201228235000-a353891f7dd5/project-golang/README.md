@@ -1,1 +1,0 @@
-This project is my first microservice that i build in golang
