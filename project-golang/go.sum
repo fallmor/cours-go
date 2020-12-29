@@ -1,2 +1,9 @@
+github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/fallmor/cours-go v0.0.0-20201229111134-1a57dadb39d8 h1:iwpRG3ljVUp2ay9yHrzKgP6OQ5CF2EvTKURZGNFsSmI=
 github.com/fallmor/cours-go v0.0.0-20201229111134-1a57dadb39d8/go.mod h1:tpCYB7cPf3aDddNjCMYcQPFb5Una7GtF24g2xfQ+97Y=
+github.com/fallmor/cours-go v0.0.0-20201229114332-8fc20d7e7869 h1:RUN8kNokyabBQl7kJdeTjYQa30CI41+87BaDdlDckac=
+github.com/fallmor/cours-go v0.0.0-20201229114332-8fc20d7e7869/go.mod h1:tpCYB7cPf3aDddNjCMYcQPFb5Una7GtF24g2xfQ+97Y=
+github.com/nicholasjackson/env v0.6.0 h1:6xdio52m7cKRtgZPER6NFeBZxicR88rx5a+5Jl4/qus=
+github.com/nicholasjackson/env v0.6.0/go.mod h1:/GtSb9a/BDUCLpcnpauN0d/Bw5ekSI1vLC1b9Lw0Vyk=
+github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
