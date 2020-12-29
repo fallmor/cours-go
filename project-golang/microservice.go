@@ -1,9 +1,12 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"time"
 
 	"github.com/fallmor/cours-go/project-golang/handlers"
 )
@@ -28,8 +31,30 @@ func main() {
 		})*/ //le code handler est géré maintenant par le fichier hello.go qui est dans le dossier handler
 
 	l := log.New(os.Stdout, "product-api", log.LstdFlags)
-	hh := handlers.NewHello(l)
+	//create handler
+	ph := handlers.NewProducts(l)
+	gg := handlers.NewGoodBye(l)
 	sm := http.NewServeMux()
-	sm.Handle("/", hh)
-	http.ListenAndServe(":9090", sm) //accepte toutes les connexions sur le port 9090. En quelque sorte on crée un serveur http
+	sm.Handle("/", ph)
+	sm.Handle("/goodbye", gg)
+	s := http.Server{
+		Addr:         ":9090",
+		Handler:      sm,
+		IdleTimeout:  120 * time.Second,
+		ReadTimeout:  1 * time.Second,
+		WriteTimeout: 1 * time.Second,
+	}
+	go func() {
+		err := s.ListenAndServe() //accepte toutes les connexions sur le port 9090. En quelque sorte on crée un serveur http
+		if err != nil {
+			l.Fatal(err)
+		}
+	}()
+	sigchan := make(chan os.Signal)
+	signal.Notify(sigchan, os.Interrupt)
+	signal.Notify(sigchan, os.Kill)
+	sig := <-sigchan
+	l.Println("Terminating the server", sig)
+	tc, _ := context.WithTimeout(context.Background(), 30*time.Second)
+	s.Shutdown(tc)
 }
