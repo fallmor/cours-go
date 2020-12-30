@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/PacktPublishing/Building-Microservices-with-Go-Second-Edition/product-api/8_validation/data"
+	"github.com/fallmor/cours-go/project-golang/data"
 )
 
 type Products struct {
@@ -20,6 +20,9 @@ func (p *Products) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		p.GetProducts(rw, r)
 		return
 	}
+	if r.Method == http.MethodPost {
+		p.addProduct(rw, r)
+	}
 	rw.WriteHeader(http.StatusMethodNotAllowed)
 
 	// fetch the products from the datastore
@@ -34,8 +37,18 @@ func (p *Products) GetProducts(rw http.ResponseWriter, r *http.Request) {
 	lp := data.GetProducts()
 
 	// serialize the list to JSON
-	err := lp.ToJSON(rw)
+	err := lp.ToJ(rw)
 	if err != nil {
 		http.Error(rw, "Unable to marshal json", http.StatusInternalServerError)
 	}
+}
+func (p *Products) addProduct(rw http.ResponseWriter, r *http.Request) {
+	p.l.Println("Handle Post Products")
+	prod := &data.Product{}
+	err := prod.FromJ(r.Body)
+	if err != nil {
+		http.Error(rw, "Unable to use Post Method", http.StatusBadRequest)
+	}
+	p.l.Printf("Prod: %#v", prod)
+	data.AddProducts(prod)
 }
