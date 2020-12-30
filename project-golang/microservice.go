@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/fallmor/cours-go/project-golang/handlers"
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -29,18 +30,27 @@ func main() {
 		http.HandleFunc("/Bye", func(http.ResponseWriter, *http.Request) {
 			log.Println("ByeBye from Mor")
 		})*/ //le code handler est géré maintenant par le fichier hello.go qui est dans le dossier handler
-
+	//var bindAddress = env.String("BIND_ADDRESS", false, ":9090", "Bind address for the server")
 	l := log.New(os.Stdout, "product-api", log.LstdFlags)
 	//create handler
 	ph := handlers.NewProducts(l)
-	gg := handlers.NewGoodBye(l)
-	sm := http.NewServeMux()
-	sm.Handle("/", ph)
-	sm.Handle("/goodbye", gg)
+	//gg := handlers.NewGoodBye(l)
+	sm := mux.NewRouter()
+	getRouter := sm.Methods(http.MethodGet).Subrouter()
+	getRouter.HandleFunc("/", ph.GetProducts)
+
+	putRouter := sm.Methods(http.MethodPut).Subrouter()
+	putRouter.HandleFunc("/{id:[0-9]+}", ph.UpdateProducts)
+	putRouter.Use(ph.MiddlewareProdutcsValidation)
+
+	postRouter := sm.Methods(http.MethodPost).Subrouter()
+	postRouter.HandleFunc("/", ph.AddProduct)
+	postRouter.Use(ph.MiddlewareProdutcsValidation)
+	//sm.Handle("/goodbye", gg)
 	s := http.Server{
 		Addr:         ":9090",
 		Handler:      sm,
-		IdleTimeout:  120 * time.Second,
+		IdleTimeout:  5 * time.Second,
 		ReadTimeout:  1 * time.Second,
 		WriteTimeout: 1 * time.Second,
 	}
