@@ -4,20 +4,40 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"regexp"
 	"time"
+
+	"github.com/go-playground/validator"
 )
 
 type Product struct {
 	ID          int     `json:"id"` // we tell json to lower case the id
-	Name        string  `json:"name"`
+	Name        string  `json:"name" validate:"required"`
 	Description string  `json:"description"`
-	Price       float32 `json:"price"`
-	SKU         string  `json:"sku"`
+	Price       float32 `json:"price" validate:"gt=0"`
+	SKU         string  `json:"sku" validate:"required,sku"`
 	CreatedOn   string  `json:"-"` //we tell json not to print these lines with `json: "-"`
 	UpdateOn    string  `json:"-"`
 	DeleteOn    string  `json:"-"`
 }
 type Products []*Product
+
+func (p *Product) Validate() error {
+	validate := validator.New()
+	validate.RegisterValidation("sku", ValidateSKU) //validation du  sku
+
+	return validate.Struct(p)
+}
+
+//fonction pour valider le SKu avec un regex
+func ValidateSKU(fl validator.FieldLevel) bool {
+	re := regexp.MustCompile(`[a-z]+-[a-z]+-[a-z]+`)
+	matches := re.FindAllString(fl.Field().String(), -1)
+	if len(matches) != 1 {
+		return false
+	}
+	return true
+}
 
 //the function  marshall  the struct
 func (p *Products) ToJ(w io.Writer) error {

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -65,6 +66,15 @@ func (p Products) MiddlewareProdutcsValidation(next http.Handler) http.Handler {
 			http.Error(rw, "Unable to use Post Method", http.StatusBadRequest)
 			return
 		}
+		// validation des données en middleware avant de les traiter
+		err = prod.Validate()
+		if err != nil {
+			p.l.Println("[Error] validating Products")
+			http.Error(rw,
+				fmt.Sprintf("Unable to validate the data %s", err),
+				http.StatusBadRequest)
+		}
+
 		ctx := context.WithValue(r.Context(), KeyProdruct{}, prod)
 		req := r.WithContext(ctx)
 		next.ServeHTTP(rw, req)
